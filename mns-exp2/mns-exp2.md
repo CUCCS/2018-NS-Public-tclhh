@@ -206,7 +206,7 @@ BSSID 共有 22 个。 其中有 2 个没有 ESSID，加密类型 Unknown、None
 
 很多相邻的数据包 Time 差值很接近 0.1024 s。（wireshark 的某些字段也能够显示）
 
-![interval](E:\net security\mns\mns-exp2\image\interval.jpg)
+![interval](image/interval.jpg)
 
 
 
