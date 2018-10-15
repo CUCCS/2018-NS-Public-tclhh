@@ -20,7 +20,7 @@
 
 
 
-接下来是每个 metric group 的计算公式：
+接下来是每个 metric group 的计算公式(CVSS v2.0)：
 
 > ```
 > CVSS Base Score Equation
@@ -151,8 +151,8 @@
 
 1) .  BaseScore 由三部分计算而来，Impact，Exploitability，f(Impact)。
 
-- Impact 是由 CIA 决定，简单计算一下取值，最大为 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default">$$10.00084536 (10.41 * (1 - 0.34 ^ 3))$$</script>，最小值为 0。
-- Exploitability 是由 AccessComplexity，Authentication，AccessVector组成，最大值为 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default">$$ 9.9968\ (20*0.71* 0.704)$$</script>
+- Impact 是由 CIA 决定，简单计算一下取值，最大为 <img src="http://chart.googleapis.com/chart?cht=tx&chl= $$10.00084536 (10.41 * (1 - 0.34 ^ 3))$$ style="border:none;">，最小值为 0。
+- Exploitability 是由 AccessComplexity，Authentication，AccessVector组成，最大值为 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"> $$ 9.9968\ (20*0.71* 0.704)$$ </script>
 - f(Impact) 是由 Impact 决定，当 Impact 取 0 （CIA 都为 0）时，为 0；否则，会有一个 1.176 的权值。
 
 在最终的计算公式中，Impact 的权重为 0.6，Exploitability 的权重为 0.4，CVSS 的基础分主要还是由 CIA 来定义。
