@@ -2,7 +2,7 @@
 
 ---
 
-> 作业内容：CVSS与漏洞评分实例讲解（高中低危漏洞各举一例） 
+ **作业内容：CVSS与漏洞评分实例讲解（高中低危漏洞各举一例）** 
 
 
 
@@ -10,13 +10,13 @@
 
 简单摘取 CVSS 的一些关键信息，首先介绍了一下 metric 的分类：
 
-> CVSS is composed of three metric groups, ==Base, Temporal, and Environmental, each consisting of a set of metrics==.
+> CVSS is composed of three metric groups, `Base, Temporal, and Environmental, each consisting of a set of metrics`.
 >
-> The Base metric group represents the intrinsic characteristics of a vulnerability that are ==constant over time and across user environments==. It is composed of two sets of metrics: ==the Exploitability metrics and the Impact metrics==. 
+> The Base metric group represents the intrinsic characteristics of a vulnerability that are `constant over time and across user environments`. It is composed of two sets of metrics: `the Exploitability metrics and the Impact metrics`. 
 >
-> The Temporal metric group reflects the characteristics of a vulnerability that ==**may** change over time but not across user environments==. For example, the presence of a ==simple-to-use exploit kit== would increase the CVSS score, while the creation of an official patch would decrease it. 
+> The Temporal metric group reflects the characteristics of a vulnerability that `**may** change over time but not across user environments`. For example, the presence of a `simple-to-use exploit kit` would increase the CVSS score, while the creation of an official patch would decrease it. 
 >
-> The Environmental metric group represents the characteristics of a vulnerability that are ==relevant and unique to a particular user's environment==. These metrics allow the scoring analyst to incorporate ==security controls== which may mitigate any consequences, as well as promote or demote the importance of a vulnerable system according to her business risk. 
+> The Environmental metric group represents the characteristics of a vulnerability that are `relevant and unique to a particular user's environment`. These metrics allow the scoring analyst to incorporate `security controls` which may mitigate any consequences, as well as promote or demote the importance of a vulnerable system according to her business risk. 
 
 
 
@@ -151,8 +151,8 @@
 
 1) .  BaseScore 由三部分计算而来，Impact，Exploitability，f(Impact)。
 
-- Impact 是由 CIA 决定，简单计算一下取值，最大为 $$10.00084536 (10.41 * (1 - 0.34 ^ 3))$$，最小值为 0。
-- Exploitability 是由 AccessComplexity，Authentication，AccessVector组成，最大值为 $$ 9.9968\ (20*0.71* 0.704)$$
+- Impact 是由 CIA 决定，简单计算一下取值，最大为 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default">$$10.00084536 (10.41 * (1 - 0.34 ^ 3))$$</script>，最小值为 0。
+- Exploitability 是由 AccessComplexity，Authentication，AccessVector组成，最大值为 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default">$$ 9.9968\ (20*0.71* 0.704)$$</script>
 - f(Impact) 是由 Impact 决定，当 Impact 取 0 （CIA 都为 0）时，为 0；否则，会有一个 1.176 的权值。
 
 在最终的计算公式中，Impact 的权重为 0.6，Exploitability 的权重为 0.4，CVSS 的基础分主要还是由 CIA 来定义。
