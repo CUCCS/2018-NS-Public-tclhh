@@ -1,21 +1,23 @@
 ### 网络监听
 
----
 
-- **实验[1]：检测局域⽹中的异常终端** 
+
+
+**实验[1]：检测局域⽹中的异常终端** 
 
 
 
 **实验[1]**
 
-> **网络环境**：
->
->  使用 2 台 kali 虚拟机，网络模式均使用**内网模式**
->
->  开启混杂模式主机（**promics**）IP : **10.0.3.15**
->
->  检测混杂模式主机（**detector**）IP : **10.0.3.2**  
+`````
+ **网络环境**：
 
+  使用 2 台 kali 虚拟机，网络模式均使用**内网模式**
+
+  开启混杂模式主机（**promics**）IP : **10.0.3.15**
+
+  检测混杂模式主机（**detector**）IP : **10.0.3.2**  
+`````
 
 
 #### Basis
@@ -23,7 +25,9 @@
 - **scapy** 基础语法
 - 了解 linux 下的伪广播、多播地址 ( [来源](http://blog.51cto.com/wushank/1121361) )
 
+
 ![cast](image/cast.gif)
+
 
 
 
@@ -36,6 +40,7 @@
 ![det_ping](image/det_ping.jpg)
 
 ![pro_ping](image/pro_ping.png)
+
 
 
 
@@ -55,13 +60,18 @@ ret
 
 
 
+
+
 #### *Step 1*: promisc 开启混杂模式
-
-> ip link set eth0 promisc on
->
-> ip link
-
+`````
+ ip link set eth0 promisc on
+`````
+`````
+ ip link
+`````
 ![start_promisc](image/start_promisc.png)
+
+
 
 
 
@@ -72,6 +82,7 @@ pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
 ret = src(pkt,timeout = 5)
 ret 
 ```
+
 
 **实验结果出错：**
 
@@ -97,16 +108,21 @@ ret
 
 
 **promiscping()**
+`````
+ help(promiscping)
+`````
 
-> help(promiscping)
+`````
+ Help on function promiseping in module scapy.layers.12：
 
-> Help on function promiseping in module scapy.layers.12：
->
-> promiseping(net, timeout=2, fake_bcast = '**ff：ff：ff：ff：ff：fe**', **kargs)
-> 	Send  ARP  who-has  requests  to  determine  which  hosts  are  in  promiscuous  mode 
-> promiseping(net, iface=conf.iface)
+ promiseping(net, timeout=2, fake_bcast = '**ff：ff：ff：ff：ff：fe**', **kargs)
+ 	Send  ARP  who-has  requests  to  determine  which  hosts  are  in  promiscuous  mode 
+ promiseping(net, iface=conf.iface)
+`````
 
 ![promiscping](image/promiscping.jpg)
+
+
 
 
 
@@ -127,12 +143,14 @@ ret
 
 **操作步骤：detector 使用 以下命令分别发送数据包，promisc 使用 tshark 记录抓包结果：** 
 
-> ret = promiscping('10.0.3.15')
+`````
+ ret = promiscping('10.0.3.15')
 
-> pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
-> ret = src(pkt,timeout = 5)
+ pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
+ ret = src(pkt,timeout = 5)
 
-> ret = is_promisc('10.0.3.15')
+ ret = is_promisc('10.0.3.15')
+`````
 
 抓取的数据包如下：
 
@@ -180,5 +198,6 @@ ret
 个人认为应该是不行的，注意发送 Malformed packet 的一个细节：
 
 ![detail](image/detail.png)
+
 
 这里的 WARNING 已经提示 Using broadcast , 也就是 Destination MAC 已经被替换为 Broadcast , ff : ff : ff : ff : ff : fe 将被放在 padding 字段，当解析到 Protocal 字段，解析会出错。也就是说永远都构造不出一个正常的 packet。
