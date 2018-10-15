@@ -7,17 +7,15 @@
 
 
 
-**实验[1]**
 
-`````
- **网络环境**：
+**网络环境**：
 
-  使用 2 台 kali 虚拟机，网络模式均使用**内网模式**
+ 使用 2 台 kali 虚拟机，网络模式均使用**内网模式**
 
-  开启混杂模式主机（**promics**）IP : **10.0.3.15**
+ 开启混杂模式主机（**promics**）IP : **10.0.3.15**
 
-  检测混杂模式主机（**detector**）IP : **10.0.3.2**  
-`````
+ 检测混杂模式主机（**detector**）IP : **10.0.3.2**  
+
 
 
 #### Basis
@@ -40,6 +38,7 @@
 ![det_ping](image/det_ping.jpg)
 
 ![pro_ping](image/pro_ping.png)
+
 
 
 
@@ -88,18 +87,21 @@ ret
 
 ![error](image/error.png)
 
+
 选择其他方式发送数据包，备选函数 is_promisc ()、promiscping() ：
 
 
-
 **is_promisc()**
+```
+ help(is_promisc)
+```
 
-> help(is_promisc)
+```
+ Help on function is_promisc in module scapy.layers.12：
 
-> Help on function is_promisc in module scapy.layers.12：
->
-> is_promisc(ip,fake_bcast='**ff:ff:00:00:00:00**',**kargs)
->   Try to guess if target is in Promise mode. The target is provided by its ip.
+ is_promisc(ip,fake_bcast='**ff:ff:00:00:00:00**',**kargs)
+   Try to guess if target is in Promise mode. The target is provided by its ip.
+```
 
 ![is_promisc](image/is_promisc.png)
 
@@ -138,8 +140,10 @@ ret
 - **目的 MAC**：promiscping( ) 使用 Des MAC 是 FF:FF:FF:FF:FF:FE，PING 则使用正常 MAC。 
 
   
+  
 
 **下面来解答问题 [1]:**
+
 
 **操作步骤：detector 使用 以下命令分别发送数据包，promisc 使用 tshark 记录抓包结果：** 
 
@@ -156,6 +160,7 @@ ret
 
 ![result](image/result.jpg)
 
+
 ​	1). **promiscping ( ) , Destination 为 ff:ff:ff:ff:ff:fe，和通过 help ()  看到的结果相同。**
 
 ​	2). **普通方法构造的 ICMP 数据包，Destination 为 Broadcast ( ff:ff:ff:ff:ff:ff )，Info 显示为 畸形数据包。**
@@ -164,9 +169,13 @@ ret
 
 
 
+
+
  **1)、3)** 并没有什么特别需要注意的地方，完全符合实验预期结果。ARP 的 返回数据包都使用 自己 的 MAC 地址。现在观察 **2)（畸形数据包的内容）**
 
 ![malformed](image/malformed.jpg)
+
+
 
 
 
@@ -189,6 +198,7 @@ ret
 >
 > Any of the above is possible. You’ll have to look into the specific situation to determine the reason. You could disable the dissector by disabling the protocol on the Analyze menu and check how Wireshark displays the packet then. You could (if it’s TCP) enable reassembly for TCP and the specific dissector (if possible) in the Edit|Preferences menu. You could check the packet contents yourself by reading the packet bytes and comparing it to the protocol specification. This could reveal a dissector bug. Or you could find out that the packet is indeed wrong.
 
+
 对比两者，发现 ff : ff : ff : ff : ff : fe 被作为 padding 附在 Length 字段的后面，而 Destination 变为 ff : ff : ff : ff : ff : ff（Broadcast），显然，数据包被做过手脚....... 符合 Appendix 中第 3 条，数据包的构造是畸形的。
 
 
@@ -198,6 +208,7 @@ ret
 个人认为应该是不行的，注意发送 Malformed packet 的一个细节：
 
 ![detail](image/detail.png)
+
 
 
 这里的 WARNING 已经提示 Using broadcast , 也就是 Destination MAC 已经被替换为 Broadcast , ff : ff : ff : ff : ff : fe 将被放在 padding 字段，当解析到 Protocal 字段，解析会出错。也就是说永远都构造不出一个正常的 packet。
