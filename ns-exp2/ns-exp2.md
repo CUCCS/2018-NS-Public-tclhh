@@ -22,6 +22,7 @@
 
 接下来是每个 metric group 的计算公式(CVSS v2.0)：
 
+> ```
 > CVSS Base Score Equation
 > 
 > BaseScore = (.6*Impact +.4*Exploitability-1.5)*f(Impact)
@@ -141,6 +142,7 @@
 >                         High:             1.51
 >                         Not defined       1
 > 
+>```
 
 资料来源：https://nvd.nist.gov/vuln-metrics/cvss/v3-calculator
 
