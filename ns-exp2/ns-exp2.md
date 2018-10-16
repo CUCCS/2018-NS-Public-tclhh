@@ -1,4 +1,4 @@
-### CVSS与漏洞评分
+## CVSS与漏洞评分
 
 ---
 
@@ -151,8 +151,8 @@
 
 1) .  BaseScore 由三部分计算而来，Impact，Exploitability，f(Impact)。
 
-- Impact 是由 CIA 决定，简单计算一下取值，最大为 <img src="http://chart.googleapis.com/chart?cht=tx&chl= $$10.00084536 (10.41 * (1 - 0.34 ^ 3))$$ style="border:none;">，最小值为 0。
-- Exploitability 是由 AccessComplexity，Authentication，AccessVector组成，最大值为 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=default"> $$ 9.9968\ (20*0.71* 0.704)$$ </script>
+- Impact 是由 CIA 决定，简单计算一下取值，最大为 <a href="https://www.codecogs.com/eqnedit.php?latex=10.00084536&space;(10.41&space;*&space;(1&space;-&space;0.34&space;^&space;3))" target="_blank"><img src="https://latex.codecogs.com/gif.latex?10.00084536&space;(10.41&space;*&space;(1&space;-&space;0.34&space;^&space;3))" title="10.00084536 (10.41 * (1 - 0.34 ^ 3))" /></a>，最小值为 0。
+- Exploitability 是由 AccessComplexity，Authentication，AccessVector组成，最大值为 **9.9968(20*0.71* 0.704)**
 - f(Impact) 是由 Impact 决定，当 Impact 取 0 （CIA 都为 0）时，为 0；否则，会有一个 1.176 的权值。
 
 在最终的计算公式中，Impact 的权重为 0.6，Exploitability 的权重为 0.4，CVSS 的基础分主要还是由 CIA 来定义。
@@ -168,12 +168,139 @@
 
 
 
-**问题 [1]** : 分析结果与实际操作结果不符。（**未解决**）**For Example** : 计算 Base Score最大值，结果如下：
+~~**问题 [1]** : 分析结果与实际操作结果不符。（**未解决**）**For Example** : 计算 Base Score最大值，结果如下：
 
-![BaseScore_max](image/BaseScore_max.jpg)
+~~![BaseScore_max](image/BaseScore_max.jpg)
 
-如果按照公式分析，Impact  Subscore 和 Exploitability  Subscore 之和应该达到 9.99（接近10），上图中，两项之和只有 9.9。同时，在上图 Metric 中多出了 User Interaction（UI）* 和 Scope ( S )* 项，这两项之和可以达到0.1。公式与实际不符。
+~~如果按照公式分析，Impact  Subscore 和 Exploitability  Subscore 之和应该达到 9.99（接近10），上图中，两项之和只有 9.9。同时，在上图 Metric 中多出了 User Interaction（UI）* 和 Scope ( S )* 项，这两项之和可以达到0.1。公式与实际不符。~~
 
+
+**问题[1]解决：**不知道为什么，在CVSS v3 Calculator 网站上点击 "Show Equations"，显示出来的页面却是 CVSS v2 版本的计算公式，导致实验结果与公式分析结果的不符，这里重新提供 CVSS v3 的计算公式：
+> #### CVSS v3 Equations
+>
+> The CVSS v3.0 equations are defined below.
+>
+> #### Base
+>
+> The Base Score is a function of the Impact and Exploitability sub score equations. Where the Base score is defined as,
+>
+> ​    If (Impact sub score <= 0)     0 else,
+>
+> ​    
+>
+> Scope Unchanged4 
+>
+> ​                𝑅𝑜𝑢𝑛𝑑𝑢𝑝(𝑀𝑖𝑛𝑖𝑚𝑢𝑚[(𝐼𝑚𝑝𝑎𝑐𝑡 + 𝐸𝑥𝑝𝑙𝑜𝑖𝑡𝑎𝑏𝑖𝑙𝑖𝑡𝑦), 10])
+>
+> ​    
+>
+> Scope Changed
+>
+> ​                      𝑅𝑜𝑢𝑛𝑑𝑢𝑝(𝑀𝑖𝑛𝑖𝑚𝑢𝑚[1.08 × (𝐼𝑚𝑝𝑎𝑐𝑡 + 𝐸𝑥𝑝𝑙𝑜𝑖𝑡𝑎𝑏𝑖𝑙𝑖𝑡𝑦), 10])
+>
+> and the Impact sub score (ISC) is defined as,
+>
+> ​    
+>
+> Scope Unchanged 
+>
+> 6.42 × 𝐼𝑆𝐶
+>
+> Base
+>
+> ​    
+>
+> Scope Changed 
+>
+> 7.52 × [𝐼𝑆𝐶
+>
+> 𝐵𝑎𝑠𝑒
+>
+>  − 0.029] − 3.25 × [𝐼𝑆𝐶
+>
+> 𝐵𝑎𝑠𝑒
+>
+>  − 0.02]
+>
+> 15
+>
+> Where,
+>
+> ​    𝐼𝑆𝐶
+>
+> 𝐵𝑎𝑠𝑒
+>
+>  = 1 − [(1 − 𝐼𝑚𝑝𝑎𝑐𝑡
+>
+> 𝐶𝑜𝑛𝑓
+>
+> ) × (1 − 𝐼𝑚𝑝𝑎𝑐𝑡
+>
+> 𝐼𝑛𝑡𝑒𝑔
+>
+> ) × (1 − 𝐼𝑚𝑝𝑎𝑐𝑡
+>
+> 𝐴𝑣𝑎𝑖𝑙
+>
+> )]
+>
+>  And the Exploitability sub score is,
+>
+> ​    8.22 × 𝐴𝑡𝑡𝑎𝑐𝑘𝑉𝑒𝑐𝑡𝑜𝑟 × 𝐴𝑡𝑡𝑎𝑐𝑘𝐶𝑜𝑚𝑝𝑙𝑒𝑥𝑖𝑡𝑦 × 𝑃𝑟𝑖𝑣𝑖𝑙𝑒𝑔𝑒𝑅𝑒𝑞𝑢𝑖𝑟𝑒𝑑 × 𝑈𝑠𝑒𝑟𝐼𝑛𝑡𝑒𝑟𝑎𝑐𝑡𝑖𝑜𝑛
+>
+> #### Temporal
+>
+> The Temporal score is defined as,
+>
+> ​    𝑅𝑜𝑢𝑛𝑑𝑢𝑝(𝐵𝑎𝑠𝑒𝑆𝑐𝑜𝑟𝑒 × 𝐸𝑥𝑝𝑙𝑜𝑖𝑡𝐶𝑜𝑑𝑒𝑀𝑎𝑡𝑢𝑟𝑖𝑡𝑦 × 𝑅𝑒𝑚𝑒𝑑𝑖𝑎𝑡𝑖𝑜𝑛𝐿𝑒𝑣𝑒𝑙 × 𝑅𝑒𝑝𝑜𝑟𝑡𝐶𝑜𝑛𝑓𝑖𝑑𝑒𝑛𝑐𝑒)
+>
+> #### Environmental
+>
+> The environmental score is defined as,
+>
+> ​    If (Modified Impact Sub score <= 0)     0 else,
+>
+> ​    If Modified Scope is Unchanged           Round up(Round up (Minimum [ (M.Impact + M.Exploitability) ,10]) × Exploit Code Maturity × Remediation Level × Report Confidence)
+>
+> ​    
+>
+> ​    If Modified Scope is Changed               Round up(Round up (Minimum [1.08 × (M.Impact + M.Exploitability) ,10]) × Exploit Code Maturity × Remediation Level × Report Confidence)
+>
+> And the modified Impact sub score is defined as,
+>
+> ​    If Modified Scope is Unchanged 6.42 × [𝐼𝑆𝐶
+>
+> 𝑀𝑜𝑑𝑖𝑓𝑖𝑒𝑑
+>
+> ]
+>
+> ​    
+>
+> ​    If Modified Scope is Changed 7.52 × [𝐼𝑆𝐶
+>
+> 𝑀𝑜𝑑𝑖𝑓𝑖𝑒𝑑
+>
+>  − 0.029]-3.25× [𝐼𝑆𝐶
+>
+> 𝑀𝑜𝑑𝑖𝑓𝑖𝑒𝑑
+>
+>  − 0.02] 15
+>
+> Where,
+>
+> ​    𝐼𝑆𝐶
+>
+> 𝑀𝑜𝑑𝑖𝑓𝑖𝑒𝑑
+>
+>  = 𝑀𝑖𝑛𝑖𝑚𝑢𝑚 [[1 − (1 − 𝑀. 𝐼𝐶𝑜𝑛𝑓 × 𝐶𝑅) × (1 − 𝑀. 𝐼𝐼𝑛𝑡𝑒𝑔 × 𝐼𝑅) × (1 − 𝑀. 𝐼𝐴𝑣𝑎𝑖𝑙 × 𝐴𝑅)], 0.915]
+>
+> The Modified Exploitability sub score is,
+>
+> ​    8.22 × 𝑀. 𝐴𝑡𝑡𝑎𝑐𝑘𝑉𝑒𝑐𝑡𝑜𝑟 × 𝑀. 𝐴𝑡𝑡𝑎𝑐𝑘𝐶𝑜𝑚𝑝𝑙𝑒𝑥𝑖𝑡𝑦 × 𝑀. 𝑃𝑟𝑖𝑣𝑖𝑙𝑒𝑔𝑒𝑅𝑒𝑞𝑢𝑖𝑟𝑒𝑑 × 𝑀. 𝑈𝑠𝑒𝑟𝐼𝑛𝑡𝑒𝑟𝑎𝑐𝑡𝑖𝑜n
+>
+> 4 Where “Round up” is defined as the smallest number, specified to one decimal place, that is equal to or higher than its input. For example, Round up (4.02) is 4.1; and Round up (4.00) is 4.0.
+  这一部分应该是补充的新增规则，只要将开始的公式加上新增规则即可解决问题[1]。这里就不再具体分析。
+  
 
 
 计算流程图：
