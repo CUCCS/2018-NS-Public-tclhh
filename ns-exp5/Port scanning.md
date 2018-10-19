@@ -2,7 +2,7 @@
 
 ---
 
-**实验内容：**自己动手编程实现并讲解TCP connect scan/TCP stealth scan/TCP XMAS scan/UDP scan
+**实验内容**：自己动手编程实现并讲解TCP connect scan/TCP stealth scan/TCP XMAS scan/UDP scan
 
  
 
@@ -10,7 +10,7 @@
 
 
 
-**连通性测试：**scanner ping victim
+**连通性测试**：scanner ping victim
 
 ![linkStatue](image/linkStatue.jpg)
 
@@ -46,7 +46,7 @@
 
 
 
-- **flags 过滤：根据 flags 的有效位位置，直接进行 and 操作**
+- **TCP.flags 过滤：根据 flags 的有效位位置，直接进行 and 操作**
 
   **(1) 判断 SYN：packet.flags & 0x00000010 ，scapy 简写 "S"（SYN）**
 
@@ -58,7 +58,7 @@
 
   **(5) 判断 ACK + RST：packet.flags & 0x00010010，scapy 简写 "AR"（ACK RST）**
 
-  (6) 判断 FIN + PSH + URG : packet.flags & 0x 
+  **(6) 判断 FIN + PSH + URG : packet.flags & 0x00101001，scapy 简写 "FPU"**
 
 
 
@@ -95,7 +95,7 @@
 
 
 
-**端口测试：**scanner  Kali 命令行（flags ”S“指 SYN，dport 指定扫描端口范围）：
+**端口测试**:scanner  Kali 命令行（flags ”S“指 SYN，dport 指定扫描端口范围）：
 
 ```
 ans,unans = sr(IP(src = '10.0.3.15' ,dst = '10.0.3.2')/TCP(flags = 'S',dport = (0,65535)))
@@ -129,7 +129,7 @@ wireshark 002.cap
 
 看到右边框，初步判断，大概是没有 ACK + SYN的数据包了...... 设置过滤规则：
 
-![filter_wireshark](filter_wireshark.png)
+![filter_wireshark](image/filter_wireshark.png)
 
 结果没有数据包。scanner 用 nmap 扫描，结果还是没有开放端口。为了更好的观察实验结果，有以下两种选择：
 
@@ -357,7 +357,7 @@ ans.nsummary(),unans.nsummary()
 
 （3）Filtered：
 
-![XMAS_filtered](image\XMAS_Filtered.png)
+![XMAS_filtered](image/XMAS_Filtered.png)
 
 **实验端口：** http 80 open、ftp 21 closed、56  filtered 
 
