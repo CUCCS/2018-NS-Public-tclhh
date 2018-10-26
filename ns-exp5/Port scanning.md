@@ -271,7 +271,7 @@ ans.nsummary(lfilter = lambda (s,r):r.haslayer(TCP) and (r.getlayer(TCP).flags &
 
 ![tcp_stealth_scan_filtered](image/tcp_stealth_scan_filtered.png)
 
-**scapy检测：**已经在 TCP connection scan （TCS）中提到过，之后会在代码中一并实现。
+**scapy检测**:已经在 TCP connection scan （TCS）中提到过，之后会在代码中一并实现。
 
 
 
