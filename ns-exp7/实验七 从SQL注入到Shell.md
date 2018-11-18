@@ -32,7 +32,7 @@
 
 
 
-#### Step 0 : 配置运行环境
+### Step 0 : 配置运行环境
 
 　　1) . Click [here](https://pentesterlab.com/exercises/from_sqli_to_shell) , 开启 **pentesterlab From SQL Injection to Shell** 课程的主页。
 
@@ -58,7 +58,7 @@
 
 
 
-#### Step 1: 端口扫描
+### Step 1: 端口扫描
 
 主要目的是为了获得一些基本信息。使用 nmap 扫描可用端口：
 
@@ -95,7 +95,7 @@ nc 192.168.55.3 22
 
 
 
-#### Step 2 : wfuzz 爆破
+### Step 2 : wfuzz 爆破
 
  使用 wfuzz 枚举网站下的页面。Kali 自带 wfuzz，wfuzz 也提供了字典，不需要再使用 crunch 生成可用的字典。 输入以下指令：
 
@@ -107,7 +107,7 @@ wfuzzwfuzz -c -z file,usr/share/wfuzz/wordlist/general/big.txt --hc 404 http://1
 
 
 
-#### Step 3 : 手工注入
+### Step 3 : 手工注入
 
 **1).  观察网页内容**
 
@@ -153,7 +153,7 @@ http://192.168.55.3/cat.php?id=1'
 http://192.168.55.3/cat.php?id=1%22
 ```
 
-![second](image\second.jpg)
+![second](image/second.jpg)
 
 ```
 http://192.168.55.3/cat.php?id=1%20and%201=1
@@ -211,7 +211,7 @@ http://192.168.55.3/cat.php?id=1%20and%201=0
 
   回显结果：
 
-  ![show](G:\net security\ns\ns-exp7\image\show.jpg)
+  ![show](image/show.jpg)
 
   显然回显结果在第 2 列的位置。
 
