@@ -191,13 +191,13 @@ http://192.168.55.3/cat.php?id=1%20and%201=0
 
 显示结果：
 
-![order by 0](image/order by 0.jpg)
+![order by 0](image/orderby0.jpg)
 
-![order by 1](image/order by 1.jpg)
+![order by 1](image/orderby1.jpg)
 
 .............................................................................................................
 
-![order by 5](image/order by 5.jpg)
+![order by 5](image/orderby5.jpg)
 
 显然，表有 4 列。
 
