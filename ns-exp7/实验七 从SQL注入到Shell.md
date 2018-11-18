@@ -542,7 +542,7 @@ http://192.168.55.3/admin/uploads/shell.php3?cmd=php%20-i
 
 
 
-#### Step 2 : sqlmap自动注入
+### Step 4 : sqlmap自动注入
 
 [sqlmap]: https://github.com/sqlmapproject/sqlmap 
 安装（Kali Linux 环境）：
@@ -620,7 +620,7 @@ hash值 和 密码都显示在上面。
 
 
 
-#### Step 3 : 代码实现注入
+### Step 5 : 代码实现注入
 
 ```python
 import requests
@@ -716,3 +716,7 @@ if __name__ == '__main__':
 结果大概是这样：
 
 ![script](image/script.jpg)
+
+参阅：
+- https://pentesterlab.com/exercises/from_sqli_to_shell
+- https://github.com/CUCCS/2018-NS-Public-jckling
