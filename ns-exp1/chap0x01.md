@@ -70,7 +70,7 @@
 
 虚拟机外部配置：
 
-![gateway_inter](E:\网络安全\实验一\image\gateway_inter.png)
+![gateway_inter](image/gateway_inter.png)
 
 
 
