@@ -14,14 +14,14 @@
 
 
 
-##### BASIS
+#### BASIS
 
 帧的分类及作用：
 
 ```
 [=] Management Frame  (wlan.fc.type == 0x00)
 
- 用于STA与AP之间协商、关系的控制。
+   用于STA与AP之间协商、关系的控制。
 
 [+] Beacon Frame (wlan.fc.type_subtype == 0x08)
 
@@ -62,10 +62,15 @@
 	当RTS/CTS启用时，一个站在发送数据帧之前发送一个RTS帧，当接收方愿意接收额外的流量时，它会响应一个CTS帧。在RTS/CTS交换之后，这个站开启一个时间窗口（在CTS帧中标识），用于向确认接收的站发送数据帧。
 
 [=] Data Frame (wlan.fc.type == 0x02)
+
 [+] Data (wlan.fc.type_subtype == 0x20)
+
 [+] Null (wlan.fc.type_subtype ==0x24)
+
 [+] Qos Data (wlan.fc.type_subtype == 0x28)
+
 [+] Qos Null (wlan.fc.type_subtype == 0x2c)
+
 ```
 
 资料来源：https://www.binss.me/blog/notes-of-802.11-protocal/
@@ -128,7 +133,7 @@ textbook 中提到 Monitor mode 和 Managed mode 的区别：
 
 为了更好地观察数据包，使用 Monitor mode。通过 airmon-ng 开启 Monitor:
 
-![airmon-ng start](image/airmon-ng start.jpg)
+![airmon-ng start](image/airmon-ng_start.jpg)
 
 简单地查看一下关键信息。接下来尝试 airodump-ng 抓包（首先使用 chancel hopping）：
 
@@ -202,7 +207,7 @@ presence of a wireless LAN and to synchronise the members of the service set.
 
   关于情况 (1) , 个人感觉并不属于 **隐藏 SSID** , 原因 <1> 在 Kali 中 , 其他的不可打印字符都会被替代：
 
-  ![char](G:/net%20security/mns/mns-exp2/image/char.jpg)
+  ![char](image/char.jpg)
 
   <2> 对于一些 Unicode 、GBK 编码的多字节码 , 如果使用 ASCII 解码 , 不可打印字符的情况就会变得十分常见 , 并没有隐藏的效果。(不知道手机的 WIFI 扫描列表是怎么解码的 ......)
 
@@ -213,7 +218,7 @@ presence of a wireless LAN and to synchronise the members of the service set.
 
 - 如何分析出一个指定手机在抓包时间窗口内在手机端的无线网络列表可以看到哪些SSID？
 
-==[这里默认从抓包的结果分析手机WLAN 扫描结果]==    从理论上分析，手机在抓包时间窗口内在手机端的无线网络列表可以看到的SSID，应该是**该时间段内发送过Beacon Frame且Beacon Frame 被手机成功接受识别的 AP 的 SSID**。但实际情况可能会更复杂，这里提供几个可以考虑的点 **(1)抓包设备 和 手机 的相对位置 (2) 抓包设备 和 手机 无限信号的接收范围 (3) Beacon 帧发送时的时间间隔  (4) chancel hopping 影响**。
+**[这里默认从抓包的结果分析手机WLAN 扫描结果]**    从理论上分析，手机在抓包时间窗口内在手机端的无线网络列表可以看到的SSID，应该是**该时间段内发送过Beacon Frame且Beacon Frame 被手机成功接受识别的 AP 的 SSID**。但实际情况可能会更复杂，这里提供几个可以考虑的点 **(1)抓包设备 和 手机 的相对位置 (2) 抓包设备 和 手机 无限信号的接收范围 (3) Beacon 帧发送时的时间间隔  (4) chancel hopping 影响**。
 
 问题 (1) 和 (2) 可以归结为一个问题：两者信号的覆盖范围的交集 , 应该就是两者都收到的 beacon frame 。如果两者相对位置很近 , 且信号覆盖范围基本相同 , 数据包中的 beacon frame 就是手机端的无线网络列表。(不考虑chancel hopping、隐藏 SSID 、识别问题)
 
@@ -235,7 +240,7 @@ presence of a wireless LAN and to synchronise the members of the service set.
 
 > ### Beacon interval
 >
-> This is the time interval between beacon transmissions. The time at which a node (AP, station when in *ad hoc* or P2P GO mode) must send a beacon is known as Target Beacon Transmission Time (TBTT). Beacon interval expressed in [Time Unit (TU)](https://en.wikipedia.org/wiki/TU_(Time_Unit)). It is a configurable parameter in the AP and ==typically configured as 100 TU==.[[2\]
+> This is the time interval between beacon transmissions. The time at which a node (AP, station when in *ad hoc* or P2P GO mode) must send a beacon is known as Target Beacon Transmission Time (TBTT). Beacon interval expressed in [Time Unit (TU)](https://en.wikipedia.org/wiki/TU_(Time_Unit)). It is a configurable parameter in the AP and **typically configured as 100 TU**.[[2\]
 >
 > A **time unit** (**TU**) is a unit of time equal to **1024** [microseconds](https://en.wikipedia.org/wiki/Microseconds).[[1\]](https://en.wikipedia.org/wiki/TU_(Time_Unit)#cite_note-IEEE_802.11-2007-1) It was originally introduced in the meanwhile obsolete [IEEE 802.11-1999](https://en.wikipedia.org/wiki/IEEE_802.11-1999) standard[[2\]](https://en.wikipedia.org/wiki/TU_(Time_Unit)#cite_note-Maufer_2004-2) but continues to be used also in newer issues of the [IEEE 802.11](https://en.wikipedia.org/wiki/IEEE_802.11) standard.[[1\]](https://en.wikipedia.org/wiki/TU_(Time_Unit)#cite_note-IEEE_802.11-2007-1) .   
 >
