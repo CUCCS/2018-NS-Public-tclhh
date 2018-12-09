@@ -47,7 +47,7 @@
 
 ```
 pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
-ret = src(pkt,timeout = 5)
+ret = sr(pkt,timeout = 5)
 ret
 ```
 
@@ -78,7 +78,7 @@ ret
 
 ```
 pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
-ret = src(pkt,timeout = 5)
+ret = sr(pkt,timeout = 5)
 ret 
 ```
 
@@ -151,7 +151,7 @@ ret
  ret = promiscping('10.0.3.15')
 
  pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
- ret = src(pkt,timeout = 5)
+ ret = sr(pkt,timeout = 5)
 
  ret = is_promisc('10.0.3.15')
 `````
@@ -212,3 +212,42 @@ ret
 
 
 这里的 WARNING 已经提示 Using broadcast , 也就是 Destination MAC 已经被替换为 Broadcast , ff : ff : ff : ff : ff : fe 将被放在 padding 字段，当解析到 Protocal 字段，解析会出错。也就是说永远都构造不出一个正常的 packet。
+
+**问题解决：**
+之前观察到了畸形数据包, 并提出猜测, ` WARNING 已经提示 Using broadcast , 也就是 Destination MAC 已经被替换为 Broadcast , ff : ff : ff : ff : ff : fe 将被放在 padding 字段`,猜测是没有问题的, 但是使用 scapy 完全可以构造一个正常的数据包（问题[2] 的回答是不完全正确的）,引用一段[评论](https://stackoverflow.com/questions/18625072/understanding-the-scapy-mac-address-to-reach-destination-not-found-using-broad)：
+
+```
+Most people encountering this issue are incorrectly using send() (or sr(), sr1(), srloop()) instead of sendp() (or srp(), srp1(), srploop()). For the record, the "without-p" functions like send() are for sending layer 3 packets (send(IP())) while the "with-p" variants are for sending layer 2 packets (sendp(Ether() / IP())).
+
+If you define x like I do below and use sendp() (and not send()) and you still have this issue, you should probably try with the latest version from the project's git repository (see https://github.com/secdev/scapy).
+
+I've tried:
+
+>>> x = Ether(src='01:00:0c:cc:cc:cc', dst='00:11:22:33:44:55')
+>>> ls(x)
+dst        : DestMACField         = '00:11:22:33:44:55' (None)
+src        : SourceMACField       = '01:00:0c:cc:cc:cc' (None)
+type       : XShortEnumField      = 0               (0)
+>>> sendp(x, iface='eth0')
+
+Sent 1 packets.
+At the same time I was running tcpdump:
+
+# tcpdump -eni eth0 ether host 00:11:22:33:44:55
+tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
+listening on eth0, link-type EN10MB (Ethernet), capture size 65535 bytes
+12:33:47.774570 01:00:0c:cc:cc:cc > 00:11:22:33:44:55, 802.3, length 14: [|llc]
+```
+也就是说问题的关键是 sr 的使用,sr 是用在第 3 层 , 正确的方法应该是使用 srp ,srp 才是用在第 2 层的函数, scapy 的文档上也解释了两者的差别：
+```
+Sending packets
+Now that we know how to manipulate packets. Let’s see how to send them. The send() function will send packets at layer 3. That is to say, it will handle routing and layer 2 for you. The sendp() function will work at layer 2. It’s up to you to choose the right interface and the right link layer protocol. send() and sendp() will also return sent packet list if return_packets=True is passed as parameter.
+```
+现在，重新构造数据包进行实验（sr -> srp）：
+```
+ pkt = Ether(dst = 'ff:ff:ff:ff:ff:fe')/IP(dst = '10.0.3.15')/ICMP()
+ ret = srp(pkt,timeout = 5)
+ ```
+ 结果如下：
+![new_test](image/new_test.png)
+实验成功, 问题成功解决！
