@@ -261,4 +261,4 @@ Frame type	               Ethertype or length	    Payload start two bytes
 Novell raw IEEE 802.3  	       ≤ 1500	                    0xFFFF
 ```
 - 根据下图解析为 IPX
-![resolve](image\resolve.gif)
+![resolve](image/resolve.gif)
