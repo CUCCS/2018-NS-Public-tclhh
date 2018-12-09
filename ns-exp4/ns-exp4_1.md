@@ -249,5 +249,5 @@ Now that we know how to manipulate packets. Let’s see how to send them. The se
  ret = srp(pkt,timeout = 5)
  ```
  结果如下：
-![new_test](image/new_test.png)
+![new_test](image/new_test.jpg)
 实验成功, 问题成功解决！
