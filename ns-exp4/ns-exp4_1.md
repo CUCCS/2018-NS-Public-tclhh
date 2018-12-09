@@ -258,7 +258,7 @@ Now that we know how to manipulate packets. Let’s see how to send them. The se
 - 读取后两个字节为 0xffff, 根据下表解析为 Novell raw IEEE 802.3
 ```
 Frame type	               Ethertype or length	    Payload start two bytes
-Novell raw IEEE 802.3  	  ≤ 1500	                 0xFFFF
+Novell raw IEEE 802.3  	       ≤ 1500	                    0xFFFF
 ```
 - 根据下图解析为 IPX
 ![resolve](resolve.gif)
