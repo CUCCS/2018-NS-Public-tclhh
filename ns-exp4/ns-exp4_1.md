@@ -12,7 +12,7 @@
 
  使用 2 台 kali 虚拟机，网络模式均使用**内网模式**
 
- 开启混杂模式主机（**promics**）IP : **10.0.3.15**
+ 开启混杂模式主机（**promisc**）IP : **10.0.3.15**
 
  检测混杂模式主机（**detector**）IP : **10.0.3.2**  
 
@@ -251,3 +251,14 @@ Now that we know how to manipulate packets. Let’s see how to send them. The se
  结果如下：
 ![new_test](image/new_test.jpg)
 实验成功, 问题成功解决！
+
+**关于 IPX 解析问题：**
+稍微梳理了一下思路，大致是这么一个过程：
+- EtherType 字段为 0x0001 < 1500, 解析为EtherLength
+- 读取后两个字节为 0xffff, 根据下表解析为 Novell raw IEEE 802.3
+```
+Frame type	               Ethertype or length	    Payload start two bytes
+Novell raw IEEE 802.3  	  ≤ 1500	                 0xFFFF
+```
+- 根据下图解析为 IPX
+![resolve](resolve.gif)
