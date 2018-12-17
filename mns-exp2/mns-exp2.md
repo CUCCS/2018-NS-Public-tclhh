@@ -51,6 +51,7 @@
 
    用来终结关联关系。收到Disassociation后，AP将释放先前为该STA分配的资源。
    
+   
 [=] Control Frame (wlan.fc.type == 0x02)
 
 [+] Acknowledgement Frame (wlan.fc.type_subtype == 0x1d)
@@ -60,6 +61,7 @@
 [+] Request to Send Frame / Clear to Send Frame (wlan.fc.type_subtype == 0x1b) / (wlan.fc.type_subtype == 0x1c)
 
 	当RTS/CTS启用时，一个站在发送数据帧之前发送一个RTS帧，当接收方愿意接收额外的流量时，它会响应一个CTS帧。在RTS/CTS交换之后，这个站开启一个时间窗口（在CTS帧中标识），用于向确认接收的站发送数据帧。
+	
 
 [=] Data Frame (wlan.fc.type == 0x02)
 
@@ -135,7 +137,7 @@ textbook 中提到 Monitor mode 和 Managed mode 的区别：
 
 ![airmon-ng start](image/airmon-ng_start.jpg)
 
-简单地查看一下关键信息。接下来尝试 airodump-ng 抓包（首先使用 chancel hopping）：
+简单地查看一下关键信息。接下来尝试 airodump-ng 抓包（首先使用 channel hopping）：
 
 ```
 airodump-ng wlan0mon --beacons
@@ -143,7 +145,7 @@ airodump-ng wlan0mon --beacons
 
 ![airodump](image/airodump.jpg)
 
-ctrl + c 退出后，重新抓包并保存（还是使用 chancel hopping）：
+ctrl + c 退出后，重新抓包并保存（还是使用 channel hopping）：
 
 ```
 airodump-ng wlan0mon -w saved --beacons
@@ -156,7 +158,7 @@ airodump-ng wlan0mon -w saved --beacons
 查看独立的 SSID，输入指令：
 
 ```
-aircrack saved-01.cap
+aircrack-ng saved-01.cap
 ```
 
 ![aircrack](image/aircrack.jpg)
@@ -191,7 +193,7 @@ presence of a wireless LAN and to synchronise the members of the service set.
 
 **{2} . 如何判断 SSID 是否是隐藏 SSID ?（未解决）**
 
-如上图，我只能将 ESSID 为空作为隐藏 SSID 的特征。但是，**ESSID 为空并不能说明是隐藏 SSID，ESSID 不为空也不能说明其不是隐藏 SSID。i.e. 我并没有找到一种判断 SSID 是否是隐藏 SSID 的决定性方法。**但是，还是有一种笨方法：规定一段时间，记录下所有发送 Beacon 的 SSID 取并集，并将该段时间所抓到的数据包用 aircrack-ng 呈现，通过比较得到哪些 SSID 是隐藏 SSID。(个人感觉这种方法不靠谱......)
+如上图，我只能将 ESSID 为空作为隐藏 SSID 的特征。但是，**ESSID 为空并不能说明是隐藏 SSID，ESSID 不为空也不能说明其不是隐藏 SSID。i.e. 我并没有找到一种判断 SSID 是否是隐藏 SSID 的决定性方法**。但是，还是有一种笨方法：规定一段时间，记录下所有发送 Beacon 的 SSID 取并集，并将该段时间所抓到的数据包用 aircrack-ng 呈现，通过比较得到哪些 SSID 是隐藏 SSID。(个人感觉这种方法不靠谱......)
 
 加密方式上图 Encryption 已经写的很清楚，这里就不再赘述。
 
@@ -218,9 +220,9 @@ presence of a wireless LAN and to synchronise the members of the service set.
 
 - 如何分析出一个指定手机在抓包时间窗口内在手机端的无线网络列表可以看到哪些SSID？
 
-**[这里默认从抓包的结果分析手机WLAN 扫描结果]**    从理论上分析，手机在抓包时间窗口内在手机端的无线网络列表可以看到的SSID，应该是**该时间段内发送过Beacon Frame且Beacon Frame 被手机成功接受识别的 AP 的 SSID**。但实际情况可能会更复杂，这里提供几个可以考虑的点 **(1)抓包设备 和 手机 的相对位置 (2) 抓包设备 和 手机 无限信号的接收范围 (3) Beacon 帧发送时的时间间隔  (4) chancel hopping 影响**。
+**[这里默认从抓包的结果分析手机WLAN 扫描结果]**    从理论上分析，手机在抓包时间窗口内在手机端的无线网络列表可以看到的SSID，应该是**该时间段内发送过Beacon Frame且Beacon Frame 被手机成功接受识别的 AP 的 SSID**。但实际情况可能会更复杂，这里提供几个可以考虑的点 **(1)抓包设备 和 手机 的相对位置 (2) 抓包设备 和 手机 无线信号的接收范围 (3) Beacon 帧发送时的时间间隔  (4) channel hopping 影响**。
 
-问题 (1) 和 (2) 可以归结为一个问题：两者信号的覆盖范围的交集 , 应该就是两者都收到的 beacon frame 。如果两者相对位置很近 , 且信号覆盖范围基本相同 , 数据包中的 beacon frame 就是手机端的无线网络列表。(不考虑chancel hopping、隐藏 SSID 、识别问题)
+问题 (1) 和 (2) 可以归结为一个问题：两者信号的覆盖范围的交集 , 应该就是两者都收到的 beacon frame 。如果两者相对位置很近 , 且信号覆盖范围基本相同 , 数据包中的 beacon frame 就是手机端的无线网络列表。(不考虑channel hopping、隐藏 SSID 、识别问题)
 
 
 
@@ -234,7 +236,7 @@ presence of a wireless LAN and to synchronise the members of the service set.
 
 ![Beacon_send_rec](image/Beacon_send_rec.jpg)
 
-如果出现上图的情况，手机WLAN 列表将永远扫描不到该 AP发送的 Beacon，而我们抓包结果是一个连续的过程（这里不考虑 chancel hopping 的影响），将能够抓取的该 AP发送的 Beacon，将导致分析结果不一致。
+如果出现上图的情况，手机WLAN 列表将永远扫描不到该 AP发送的 Beacon，而我们抓包结果是一个连续的过程（这里不考虑 channel hopping 的影响），将能够抓取的该 AP发送的 Beacon，将导致分析结果不一致。
 
 关于 **[1]** 的解答：
 
