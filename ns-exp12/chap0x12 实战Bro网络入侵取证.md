@@ -174,7 +174,7 @@ emacs /usr/share/bro/policy/frameworks/files/detect-MHR.bro
 
 ![team_cymru](image/team_cymru.jpg)
 
-官网上也给出了 `hash值` + `malware.hash.cymru.com` 的命令格式 , 将上面的指令输入:
+官网上也给出了 `hash值` + `malware.hash.cymru.com` 的命令, 将上面的指令输入:
 
 ```bash
 dig +short 85c54723deeab4e296eb5542712cd463fdac7527.malware.hash.cymru.com A
