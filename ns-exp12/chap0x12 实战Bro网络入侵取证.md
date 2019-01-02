@@ -149,4 +149,59 @@ victim 下载了 `ssms.exe` 文件。
 Detect file downloads that have hash values matching files in Team Cymru’s Malware Hash Registry.
 ```
 
-  后来尝试在 `/etc/bro/site/local.bro` 中增添 `@load policy/frameworks/files/detect-MHR.bro` 和直接使用指令 `bro -r attack-trace.pcap /usr/share/bro/policy/frameworks/files/detect-MHR.bro` , 发现和
+  后来尝试在 `/etc/bro/site/local.bro` 中增添 `@load policy/frameworks/files/detect-MHR.bro` 和直接使用指令 `bro -r attack-trace.pcap /usr/share/bro/policy/frameworks/files/detect-MHR.bro` , 发现和没有添加 `detect-MHR.bro` 没有区别。后来做了一下简单的调试:
+
+```
+emacs /usr/share/bro/policy/frameworks/files/detect-MHR.bro
+```
+
+![emacs_MHR](image/emacs_MHR.jpg)
+
+![bro_res2](image/bro_res2.jpg)
+
+后来简单地查了一下 `when` 函数 , 主要用于异步执行 ,  增加 `timeout` 调试:
+
+![timeout](image/timeout.jpg)
+
+![timeout_res](image/timeout_res.jpg)
+
+直接访问网址 `ac3cdd673f5126bc49faa72fb52284f513929db4.malware.hash.cymru.com` , 结果如下:
+
+![visit](image/visit.jpg)
+
+简单地看了一下 [TEAM CYMRU](https://www.team-cymru.com/mhr.html) , 画风是这样的:
+
+![team_cymru](image/team_cymru.jpg)
+
+官网上也给出了 `hash值` + `malware.hash.cymru.com` 的命令格式 , 将上面的指令输入:
+
+```bash
+dig +short 85c54723deeab4e296eb5542712cd463fdac7527.malware.hash.cymru.com A
+dig +short 58701c8b2469e1404298a38dfbcfdb03b69f4a6d.malware.hash.cymru.com TXT
+```
+
+![team_res](image/team_res.jpg)
+
+和官网上提供的结果不一致。(我也不知道是怎么回事......) 现在 , 只能修改 `detect-MHR.bro` 的源代码中的 url 了。首先 , 必选找到能够提供返回正确结果的 url, 发现 `TEAM CYMRU`  MHR 的网站是这样的:
+
+![lookup](image/lookup.jpg)
+
+点击 `submit`, 返回结果如下:
+
+![lookup2](image/lookup2.jpg)
+
+上图中返回的三元组和官网上提供的 `whois` 查询指令返回的结果相类似 , 第一个参数是上传的 hash , 第二个参数是 GMT 时间戳 , 第三个参数是在数据库中返回的查询结果。在看一下源代码:
+
+![source_code](image/source_code.jpg)
+
+显然 , 和上面的网页上返回的结果不符 , **现在不知道如何找到能返回正确结果的 URL** ( **未解决** ) 
+
+
+
+### 参阅
+
+- [VirusTotal Public API](https://www.virustotal.com/en/documentation/public-api/#getting-file-scans)
+- [VirusTotal search](https://www.virustotal.com/en/documentation/searching/)
+- [policy/frameworks/files/detect-MHR.bro](https://www.bro.org/sphinx-git/scripts/policy/frameworks/files/detect-MHR.bro.html)
+- [Try bro](http://try.bro.org/#/?example=modules-log-factorial)
+- [Team Cymru SHA1/MD5 MHR Lookup v1.0](http://hash.cymru.com/)
