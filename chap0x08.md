@@ -82,7 +82,7 @@
   ufw delete 6;ufw delete 1
   ```
 
-  **注意：上面的删除指令应该先删除 num 更大的指令(上例中先删除6，后删除1)。因为如果先删除小的 num，规则会前移(一般应该不会重新排序) **
+  **注意：上面的删除指令应该先删除 num 更大的指令(上例中先删除6，后删除1)。因为如果先删除小的 num，规则会前移(一般应该不会重新排序)**
 
   ![delete2](image/delete2.jpg)
 
@@ -555,7 +555,7 @@ $IPT -t nat -A POSTROUTING -s 172.16.18.1/24 -o eth0 -j MASQUERADE
 题目中的 host2 网卡名称不是很清楚，这里标明 `eth0:172.16.18.1,eth1:192.168.1.123 `回答问题：
 
 - host-1可以ping通 ip: 172.16.18.1吗？
-- - 可以。第一个ping包进入到 `icmp_demo`链，匹配`IPT -A icmp_demo -p icmp -i eth0 -j ACCEPT`规则，`state`变化 `New`=> `ESTABLISHED`，之后直接匹配规则`IPT -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT`。全程都可以ping 通。
+  - 可以。第一个ping包进入到 `icmp_demo`链，匹配`IPT -A icmp_demo -p icmp -i eth0 -j ACCEPT`规则，`state`变化 `New`=> `ESTABLISHED`，之后直接匹配规则`IPT -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT`。全程都可以ping 通。
 - host-1可以ping通ip: 192.168.1.1吗？
   - 不行。ping包进入`FORWARD `链，没有`icmp`协议的 iptables 规则，规则链默认策略为 `Drop`，直接丢弃。
 - host-1可以ping通域名: www.baidu.com吗？
@@ -565,13 +565,12 @@ $IPT -t nat -A POSTROUTING -s 172.16.18.1/24 -o eth0 -j MASQUERADE
   - 不行。DNS 解析过程没问题，但是 tcp 连接匹配规则`$IPT -A forward_demo -p tcp --dport 80 -m string --algo bm --string 'baidu' -j DROP`，`payload`包含`baidu`数据包被丢弃。
 - host-1可以访问：<http://61.135.169.121> 吗？
 
-- - 可以。匹配规则`$IPT -A forward_demo -p tcp -s 172.16.18.11 -j ACCEPT`
+  - 可以。匹配规则`$IPT -A forward_demo -p tcp -s 172.16.18.11 -j ACCEPT`
     和`$IPT -A forward_demo -p tcp -d 172.16.18.11 -j ACCEPT`
 - host-3可以ping通ip: 172.16.18.1吗？
-- - 可以。同1
+  - 可以。同1
 - host-3可以ping通ip: 192.168.1.1吗？
-
-- - 不行。同2
+  - 不行。同2
 - host-3可以访问互联网吗？
   - 不行。host-3 向 host-2 发送的 UDP包没用匹配任何 iptables 规则，根据默认策略直接被丢弃。
 
