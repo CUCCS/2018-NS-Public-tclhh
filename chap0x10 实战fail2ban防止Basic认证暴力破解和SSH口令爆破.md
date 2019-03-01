@@ -79,7 +79,7 @@
   enabled = true
   filter  = apache-auth
   action  = iptables-multiport[name=basic-auth,port="80,443"]
-            sendmail[name=basic-auth, dest=m13723133446@163.com]
+            sendmail[name=basic-auth, dest=your-email]
   logpath = /var/log/apache2/error.log
   bantime = 86400
   maxretry = 5
